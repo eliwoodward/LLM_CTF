@@ -1,246 +1,448 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HeliosBank LLM CTF</title>
-    <style>
-        body {
-            font-family: Consolas, monospace;
-            background: #0b0c10;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            color: #c5c6c7;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HeliosBank LLM CTF</title>
+  <style>
+    body {
+      font-family: Consolas, "Lucida Console", monospace;
+      background: #0b0c10;
+      margin: 0;
+      padding: 0;
+      color: #c5c6c7;
+    }
 
-        .container {
-            max-width: 850px;
-            margin: 40px auto;
-            padding: 30px;
-            background: #1f2833;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.45);
-        }
+    .page-wrap {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
 
-        img.logo {
-            max-width: 260px;
-            margin-bottom: 20px;
-        }
+    .container {
+      max-width: 900px;
+      width: 100%;
+      margin: 32px 16px;
+      padding: 28px;
+      background: #1f2833;
+      border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.55);
+    }
 
-        h1 {
-            font-size: 34px;
-            margin-bottom: 10px;
-            color: #66fcf1;
-        }
+    img.logo {
+      max-width: 260px;
+      display: block;
+      margin: 0 auto 16px auto;
+    }
 
-        p.intro {
-            font-size: 18px;
-            margin-bottom: 30px;
-            color: #c5c6c7;
-        }
+    h1 {
+      font-size: 32px;
+      text-align: center;
+      color: #66fcf1;
+      margin: 0 0 8px 0;
+    }
 
-        .link-box {
-            margin: 20px 0;
-            padding: 18px;
-            background: #0d1b25;
-            border-left: 5px solid #45a29e;
-            border-radius: 8px;
-        }
+    p.intro {
+      font-size: 16px;
+      text-align: center;
+      margin: 0 0 26px 0;
+      color: #c5c6c7;
+    }
 
-        a.ctf-link {
-            font-size: 22px;
-            color: #66fcf1;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    .link-box {
+      margin: 16px 0;
+      padding: 16px 20px;
+      background: #0d1b25;
+      border-radius: 10px;
+      border-left: 4px solid #45a29e;
+    }
 
-        a.ctf-link:hover {
-            text-decoration: underline;
-        }
+    a.ctf-link {
+      font-size: 18px;
+      color: #66fcf1;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-        .linkedin {
-            margin-top: 35px;
-            font-size: 16px;
-            color: #9afcca;
-        }
+    a.ctf-link:hover {
+      text-decoration: underline;
+    }
 
-        .linkedin a {
-            color: #66fcf1;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    .linkedin {
+      margin-top: 28px;
+      font-size: 14px;
+      text-align: center;
+      color: #9afcca;
+    }
 
-        .teaser {
-            margin-top: 45px;
-            padding: 25px;
-            background: #0d1b25;
-            border-radius: 10px;
-            border-left: 5px solid #3aafa9;
-        }
+    .linkedin a {
+      color: #66fcf1;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-        h2 {
-            color: #45a29e;
-        }
+    .linkedin a:hover {
+      text-decoration: underline;
+    }
 
-        /* Terminal Emulator Styles */
-        .terminal {
-            background: #0d1117;
-            color: #c5c6c7;
-            text-align: left;
-            margin: 20px 0;
-            padding: 14px;
-            border-radius: 8px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.4);
-            font-size: 13px;
-            min-height: 260px;
-            max-height: 350px;
-            overflow-y: auto;
-        }
+    .teaser {
+      margin-top: 40px;
+      padding: 22px 20px;
+      background: #0d1b25;
+      border-radius: 12px;
+      border-left: 4px solid #3aafa9;
+    }
 
-        .prompt-line {
-            display: flex;
-            margin-top: 4px;
-        }
+    .teaser h2 {
+      margin: 0 0 8px 0;
+      font-size: 22px;
+      color: #45a29e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        .prompt-label {
-            color: #8be9fd;
-            margin-right: 6px;
-        }
+    .teaser h2 span.icon {
+      color: #ffb86c;
+    }
 
-        #terminal-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #c5c6c7;
-            font-family: inherit;
-            font-size: 14px;
-            outline: none;
-        }
+    .teaser p {
+      margin: 0 0 14px 0;
+      font-size: 14px;
+      color: #c5c6c7;
+    }
 
-        @media (max-width: 600px) {
-            .container {
-                margin: 20px;
-                padding: 20px;
-            }
-            h1 { font-size: 26px; }
-            a.ctf-link { font-size: 20px; }
-            #terminal-input { font-size: 16px; }
-        }
-    </style>
+    /* Terminal shell */
+    .terminal-shell {
+      margin-top: 10px;
+      background: #05070c;
+      border-radius: 10px;
+      box-shadow: 0 0 16px rgba(0,0,0,0.7);
+      padding: 10px 12px 12px 12px;
+      font-size: 13px;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    .term-title {
+      margin-left: 6px;
+      font-size: 11px;
+      color: #9da5b4;
+      opacity: 0.9;
+    }
+
+    #terminal-output {
+      min-height: 160px;
+      max-height: 260px;
+      overflow-y: auto;
+      background: #05070c;
+      color: #c5c6c7;
+      padding: 6px 2px 4px 2px;
+      white-space: pre-wrap;
+      font-family: inherit;
+    }
+
+    .prompt-line {
+      display: flex;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .prompt-label {
+      color: #8be9fd;
+      margin-right: 6px;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    #terminal-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #f8f8f2;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      caret-color: #66fcf1;
+    }
+
+    #terminal-input::placeholder {
+      color: #555;
+    }
+
+    .hint {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #7f8487;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        margin: 20px 12px;
+        padding: 20px 16px;
+      }
+
+      h1 { font-size: 26px; }
+
+      a.ctf-link { font-size: 17px; }
+
+      #terminal-input {
+        font-size: 16px; /* avoid iOS zoom */
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container">
-        <img class="logo" src="https://raw.githubusercontent.com/eliwoodward/LLM_CTF/refs/heads/main/HeliosBankLogo.png" alt="HeliosBank Logo">
+<div class="page-wrap">
+  <div class="container">
+    <img class="logo" src="https://raw.githubusercontent.com/eliwoodward/LLM_CTF/refs/heads/main/HeliosBankLogo.png" alt="HeliosBank Logo">
 
-        <h1>Welcome to the HeliosBank LLM CTF Series</h1>
+    <h1>HeliosBank LLM CTF Series</h1>
 
-        <p class="intro">
-            Choose your training scenario below. Each incident simulates a real-world AI-driven compromise inside HeliosBank’s internal systems.
-        </p>
+    <p class="intro">
+      Choose your training scenario below. Each incident simulates a real-world AI-driven compromise inside HeliosBank’s internal systems.
+    </p>
 
-        <div class="link-box">
-            <a class="ctf-link" href="https://eliwoodward.github.io/LLM_CTF_Scenario1/">
-                Scenario 1 – SupportGPT Incident
-            </a>
-        </div>
-
-        <div class="link-box">
-            <a class="ctf-link" href="https://eliwoodward.github.io/LLM_CTF_Scenario2/">
-                Scenario 2 – RiskGPT Incident
-            </a>
-        </div>
-
-        <p class="linkedin">
-            Say hi on LinkedIn!  
-            <a href="https://linkedin.com/in/eliwood" target="_blank">linkedin.com/in/eliwood</a>
-        </p>
-
-        <div class="teaser">
-            <h2>⚡ Coming Soon: Scenario 3 – LLM Exfiltration Hunt</h2>
-            <p>Preview the interactive investigation terminal below:</p>
-
-            <!-- TERMINAL EMULATOR -->
-            <div id="terminal-output" class="terminal"></div>
-            <div class="prompt-line">
-                <span class="prompt-label">analyst@helios:~$</span>
-                <input id="terminal-input" type="text" autocomplete="off" />
-            </div>
-        </div>
+    <div class="link-box">
+      <a class="ctf-link" href="https://eliwoodward.github.io/LLM_CTF_Scenario1/">
+        Scenario 1 – SupportGPT Incident
+      </a>
     </div>
 
+    <div class="link-box">
+      <a class="ctf-link" href="https://eliwoodward.github.io/LLM_CTF_Scenario2/">
+        Scenario 2 – RiskGPT Incident
+      </a>
+    </div>
+
+    <p class="linkedin">
+      Say hi on LinkedIn!<br>
+      <a href="https://linkedin.com/in/eliwood" target="_blank" rel="noopener noreferrer">
+        linkedin.com/in/eliwood
+      </a>
+    </p>
+
+    <div class="teaser">
+      <h2><span class="icon">⚡</span>Coming Soon: Scenario 3 – LLM Exfiltration Hunt</h2>
+      <p>Preview the interactive investigation terminal you’ll use to trace LLM data exfiltration in Scenario&nbsp;3.</p>
+
+      <div class="terminal-shell">
+        <div class="terminal-header">
+          <div class="dot red"></div>
+          <div class="dot yellow"></div>
+          <div class="dot green"></div>
+          <span class="term-title">analyst@helios:~ — scenario3-preview</span>
+        </div>
+
+        <div id="terminal-output"></div>
+
+        <div class="prompt-line">
+          <span class="prompt-label">analyst@helios:~$</span>
+          <input id="terminal-input" type="text" autocomplete="off" spellcheck="false" />
+        </div>
+      </div>
+
+      <div class="hint">
+        Try: <code>help</code>, <code>ls</code>, <code>cat readme.txt</code>, and see if you can uncover a hidden meme.
+        (Tab-complete works for commands and paths.)
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-    const terminalOutput = document.getElementById("terminal-output");
-    const terminalInput = document.getElementById("terminal-input");
-    const promptLabel = "analyst@helios:~$";
+  const terminalOutput = document.getElementById("terminal-output");
+  const terminalInput = document.getElementById("terminal-input");
+  const promptLabel = "analyst@helios:~$";
 
-    const vfs = {
-        "readme.txt": "HeliosBank Investigation Node\nUse ls to explore.",
-        "memes/": "(directory)",
-        "memes/all_your_base.txt": "YOU FOUND THE EASTER EGG!"
-    };
+  // Simple scenario-3 preview filesystem
+  const vfs = {
+    "readme.txt":
+      "HeliosBank Scenario 3 Terminal Preview\n" +
+      "--------------------------------------\n" +
+      "This is a limited shell used to investigate LLM exfiltration events.\n\n" +
+      "Commands:\n" +
+      "  help            - show supported commands\n" +
+      "  ls              - list files\n" +
+      "  cat <file>      - view file contents\n" +
+      "  clear           - clear the screen\n\n" +
+      "Rumor has it there is a hidden meme somewhere under 'memes/'.\n",
 
-    const commands = ["help", "ls", "cat", "clear"];
+    "memes/": "(directory)\nUse 'ls' to see files and 'cat <file>' to read them.\n",
 
-    function appendOutput(text) {
-        terminalOutput.innerHTML += text + "\n";
-        terminalOutput.scrollTop = terminalOutput.scrollHeight;
+    "memes/all_your_base.txt":
+      "ALL YOUR BASE ARE BELONG TO US.\n\nYOU FOUND THE EASTER EGG!\n"
+  };
+
+  const knownCommands = ["help", "ls", "cat", "clear"];
+  const knownPaths = Object.keys(vfs);
+
+  const history = [];
+  let historyIndex = -1;
+
+  function appendOutput(text) {
+    terminalOutput.textContent += text + "\n";
+    terminalOutput.scrollTop = terminalOutput.scrollHeight;
+  }
+
+  function handleHelp() {
+    appendOutput(
+      "Supported commands:\n" +
+      "  help            - show this message\n" +
+      "  ls              - list available files\n" +
+      "  cat <file>      - print a file\n" +
+      "  clear           - clear the screen"
+    );
+  }
+
+  function handleLs() {
+    // Show top-level keys, but keep 'memes/' directory obvious
+    const entries = Object.keys(vfs).map(k => k);
+    appendOutput(entries.join("\n"));
+  }
+
+  function handleCat(args) {
+    if (!args[0]) {
+      appendOutput("cat: missing file operand");
+      return;
+    }
+    const target = args[0];
+
+    if (vfs.hasOwnProperty(target)) {
+      if (target.endsWith("/")) {
+        appendOutput("cat: " + target + ": Is a directory");
+      } else {
+        appendOutput(vfs[target].trimEnd());
+      }
+    } else {
+      appendOutput("cat: " + target + ": No such file");
+    }
+  }
+
+  function handleClear() {
+    terminalOutput.textContent = "";
+  }
+
+  function handleCommand(rawInput) {
+    const input = rawInput.trim();
+    if (!input) return;
+
+    const parts = input.split(/\s+/);
+    const cmd = parts[0];
+    const args = parts.slice(1);
+
+    switch (cmd) {
+      case "help":
+        handleHelp();
+        break;
+      case "ls":
+        handleLs();
+        break;
+      case "cat":
+        handleCat(args);
+        break;
+      case "clear":
+        handleClear();
+        break;
+      default:
+        appendOutput(cmd + ": command not found");
+    }
+  }
+
+  function autocomplete() {
+    const value = terminalInput.value;
+    const cursorPos = terminalInput.selectionStart;
+    if (cursorPos !== value.length) return;
+
+    const trimmed = value.replace(/\s+$/g, "");
+    if (!trimmed) return;
+
+    const parts = trimmed.split(/\s+/);
+    const isFirst = parts.length === 1;
+
+    if (isFirst) {
+      const prefix = parts[0];
+      const matches = knownCommands.filter(c => c.startsWith(prefix));
+      if (matches.length === 1) {
+        terminalInput.value = matches[0] + " ";
+      } else if (matches.length > 1) {
+        appendOutput(matches.join("  "));
+      }
+      return;
     }
 
-    function handleCommand(input) {
-        const trimmed = input.trim();
-        const [cmd, ...args] = trimmed.split(/\s+/);
-
-        if (cmd === "help") {
-            appendOutput("help, ls, cat <file>, clear");
-            return;
-        }
-
-        if (cmd === "clear") {
-            terminalOutput.innerHTML = "";
-            return;
-        }
-
-        if (cmd === "ls") {
-            appendOutput(
-                Object.keys(vfs)
-                    .map(v => v.endsWith("/") ? v : v)
-                    .join("\n")
-            );
-            return;
-        }
-
-        if (cmd === "cat") {
-            if (!args[0]) {
-                appendOutput("cat: missing file operand");
-                return;
-            }
-
-            const target = args[0];
-
-            if (vfs[target]) {
-                appendOutput(vfs[target]);
-            } else {
-                appendOutput(`cat: ${target}: No such file`);
-            }
-            return;
-        }
-
-        appendOutput(`${cmd}: command not found`);
+    const last = parts[parts.length - 1];
+    const prefix = last;
+    const matches = knownPaths.filter(p => p.startsWith(prefix));
+    if (matches.length === 1) {
+      parts[parts.length - 1] = matches[0];
+      terminalInput.value = parts.join(" ") + " ";
+    } else if (matches.length > 1) {
+      appendOutput(matches.join("  "));
     }
+  }
 
-    terminalInput.addEventListener("keydown", function (event) {
-        if (event.key === "Enter") {
-            const value = terminalInput.value;
-            appendOutput(promptLabel + " " + value);
-            handleCommand(value);
-            terminalInput.value = "";
-        }
-    });
+  terminalInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      const value = terminalInput.value;
+      appendOutput(promptLabel + " " + value);
 
-    appendOutput("HeliosBank Scenario 3 Terminal Preview");
-    appendOutput("Type 'help' to get started.");
+      if (value.trim()) {
+        history.push(value);
+        historyIndex = history.length;
+      }
+
+      handleCommand(value);
+      terminalInput.value = "";
+      event.preventDefault();
+    } else if (event.key === "ArrowUp") {
+      if (historyIndex > 0) {
+        historyIndex -= 1;
+        terminalInput.value = history[historyIndex] || "";
+      }
+      setTimeout(() => {
+        terminalInput.selectionStart = terminalInput.selectionEnd = terminalInput.value.length;
+      }, 0);
+      event.preventDefault();
+    } else if (event.key === "ArrowDown") {
+      if (historyIndex < history.length - 1) {
+        historyIndex += 1;
+        terminalInput.value = history[historyIndex] || "";
+      } else {
+        historyIndex = history.length;
+        terminalInput.value = "";
+      }
+      setTimeout(() => {
+        terminalInput.selectionStart = terminalInput.selectionEnd = terminalInput.value.length;
+      }, 0);
+      event.preventDefault();
+    } else if (event.key === "Tab") {
+      autocomplete();
+      event.preventDefault();
+    }
+  });
+
+  // Initial banner + autofocus
+  appendOutput("HeliosBank Scenario 3 Terminal Preview");
+  appendOutput("Type 'help' to see supported commands.\n");
+  terminalInput.focus();
 </script>
 
 </body>
